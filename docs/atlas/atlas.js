@@ -23,7 +23,7 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const defaultView = { yaw: 0, pitch: 0.09, zoom: 1 };
 const state = {
   ...defaultView, selected: 'ladder', scale: 'macro', filter: 'all',
-  query: '', hot: null, geometry: 'sphere'
+  query: '', hot: null, geometry: 'sphere', layout:'relationships'
 };
 const weights = { sphere: 1, diamond: 0, helix: 0 };
 const letters = 'אבגדהוזחטיכלמנסעפצקרשת';
@@ -56,6 +56,7 @@ function setAtlas(nextNodes, nextEdges, selected, options = {}) {
   atlasOptions = options;
   byId = new Map(nodes.map(node => [node.id, node]));
   locations = new Map(nodes.map(node => [node.id, coordinates(...node.position)]));
+  cachedRelationshipLayout = null;
   Object.assign(state,{selected, hot:null, scale:options.scale ?? 'macro', filter:'all', query:''});
   $('search').value = '';
   markPressed($('scales'), $('scales').querySelector(`[data-scale="${state.scale}"]`));
@@ -110,7 +111,7 @@ function renderSelection(focusTarget) {
   $('edge-count').textContent = `${atlasOptions.linkSummary ?? `${links.length} direct links`}`;
   $('edges').innerHTML = links.map(edge => {
     const target = byId.get(edge.a === node.id ? edge.b : edge.a);
-    return `<button class="edge" data-node="${escapeHTML(target.id)}"><span class="edge-kind">${escapeHTML(edge.kind)}</span><strong>${escapeHTML(target.title)}</strong><p>${escapeHTML(edge.detail)}</p></button>`;
+    return `<button class="edge" data-edge="${edges.indexOf(edge)}"><span class="edge-kind">${escapeHTML(edge.kind)}</span><strong>${escapeHTML(target.title)}</strong><p>${escapeHTML(edge.detail)}</p></button>`;
   }).join('') || '<p class="empty">No connections to display.</p>';
   document.querySelectorAll('.node-row').forEach(row => {
     row.setAttribute('aria-current', String(row.dataset.node === node.id));
@@ -137,8 +138,8 @@ $('node-list').addEventListener('click', event => {
   if (row) selectNode(row.dataset.node);
 });
 $('edges').addEventListener('click', event => {
-  const row = event.target.closest('[data-node]');
-  if (row) selectNode(row.dataset.node, true);
+  const row = event.target.closest('[data-edge]');
+  if (row) inspectRelationship(edges[Number(row.dataset.edge)]);
 });
 $('search').addEventListener('input', event => {
   state.query = event.target.value;
@@ -164,6 +165,14 @@ $('scales').addEventListener('click', event => {
   markPressed($('scales'), button);
   renderIndex();
   showMediaPreview(null);
+  drawSoon();
+});
+$('layouts').addEventListener('click', event => {
+  const button = event.target.closest('[data-layout]');
+  if (!button) return;
+  state.layout = button.dataset.layout;
+  $('geometry').hidden = state.layout !== 'shapes';
+  markPressed($('layouts'), button);
   drawSoon();
 });
 $('shapes').addEventListener('click', event => {
@@ -207,6 +216,8 @@ function coordinates(theta, phi) {
 let width = 1, height = 1, dpr = 1;
 let frame = 0, renderedNodes = [];
 let lastTime = 0;
+let cachedRelationshipLayout = null;
+let renderedEdges = [];
 
 function drawSoon() {
   if (!frame) frame = requestAnimationFrame(draw);
@@ -216,9 +227,7 @@ function orbitProjection() {
   const yawCos = Math.cos(state.yaw), yawSin = Math.sin(state.yaw);
   const pitchCos = Math.cos(state.pitch), pitchSin = Math.sin(state.pitch);
   const size = Math.min(width*0.31,height*0.34) * state.zoom * (state.scale === 'micro' ? 1.14 : 1);
-  return point => {
-    const [x,y,z] = [0,1,2].map(axis => point.sphere[axis]*weights.sphere
-      + point.diamond[axis]*weights.diamond + point.helix[axis]*weights.helix);
+  return ([x,y,z]) => {
     const x1 = x*yawCos + z*yawSin;
     const z1 = z*yawCos - x*yawSin;
     const y1 = y*pitchCos - z1*pitchSin;
@@ -255,10 +264,15 @@ function drawSky(time) {
   ctx.restore();
 }
 
+function shapePoint(point) {
+  return [0,1,2].map(axis => point.sphere[axis]*weights.sphere
+    + point.diamond[axis]*weights.diamond + point.helix[axis]*weights.helix);
+}
+
 function drawMesh(project) {
   ctx.lineWidth = 0.75;
   for (const line of mesh) {
-    const points = line.map(project);
+    const points = line.map(point => project(shapePoint(point)));
     for (let i = 1; i < points.length; i++) {
       const a = points[i-1], b = points[i];
       const depth = (a.depth+b.depth)/2;
@@ -273,14 +287,17 @@ function drawMesh(project) {
 }
 
 function drawLinks(positions, active) {
+  renderedEdges = [];
   for (const edge of edges) {
     if (!active.has(edge.a) || !active.has(edge.b)) continue;
     const a = positions.get(edge.a), b = positions.get(edge.b);
     const selected = edge.a === state.selected || edge.b === state.selected;
     const hot = state.hot === edge.a || state.hot === edge.b;
-    ctx.strokeStyle = hot ? '#ffc98f' : selected ? '#b88779bb' : '#8e72825c';
-    ctx.lineWidth = hot ? 1.7 : selected ? 1.15 : 0.75;
-    ctx.setLineDash(selected || hot ? [] : [3,5]);
+    const style = relationshipStyle(edge);
+    ctx.strokeStyle = style.color + (hot ? 'ff' : selected ? 'dd' : '94');
+    ctx.lineWidth = hot ? 2.05 : selected ? 1.55 : 1.05;
+    ctx.setLineDash(style.dash);
+    renderedEdges.push({edge,a,b});
     ctx.beginPath();
     ctx.moveTo(a.x,a.y);
     ctx.lineTo(b.x,b.y);
@@ -323,7 +340,7 @@ function drawNodes(positions, active) {
   for (const p of labelOrder) {
     const focus = p.node.id === state.selected;
     const hot = p.node.id === state.hot;
-    if (!focus && !hot && p.depth < (width < 450 ? 0.08 : -0.42)) continue;
+    if (state.layout === 'shapes' && !focus && !hot && p.depth < (width < 450 ? 0.08 : -0.42)) continue;
     ctx.font = focus || hot ? '600 13px system-ui' : '11px system-ui';
     const title = p.node.title.length > 32 ? p.node.title.slice(0,31)+'…' : p.node.title;
     const length = ctx.measureText(title).width;
@@ -346,18 +363,28 @@ function draw(time) {
   frame = 0;
   const eased = reducedMotion.matches ? 1 : 1-Math.exp(-Math.min(time-lastTime,32)/82);
   lastTime = time;
-  let moving = false;
-  for (const shape of Object.keys(weights)) {
-    const target = Number(state.geometry === shape);
-    const difference = target-weights[shape];
-    weights[shape] = Math.abs(difference) < 0.001 ? target : weights[shape]+difference*eased;
-    moving ||= weights[shape] !== target;
-  }
   const active = activeNodes();
   const project = orbitProjection();
-  const positions = new Map([...locations].map(([id,point]) => [id,project(point)]));
+  let positions;
+  let moving = false;
   drawSky(time);
-  drawMesh(project);
+  if (state.layout === 'relationships') {
+    const ids = [...active];
+    const key = JSON.stringify(ids);
+    if (cachedRelationshipLayout?.key !== key) {
+      cachedRelationshipLayout = {key, points:relationshipLayout(ids,locations,edges)};
+    }
+    positions = new Map([...cachedRelationshipLayout.points].map(([id,point]) => [id,project(point)]));
+  } else {
+    for (const shape of Object.keys(weights)) {
+      const target = Number(state.geometry === shape);
+      const difference = target-weights[shape];
+      weights[shape] = Math.abs(difference) < 0.001 ? target : weights[shape]+difference*eased;
+      moving ||= weights[shape] !== target;
+    }
+    drawMesh(project);
+    positions = new Map([...locations].map(([id,point]) => [id,project(shapePoint(point))]));
+  }
   drawLinks(positions,active);
   drawNodes(positions,active);
   if (moving) drawSoon();
@@ -381,6 +408,24 @@ function hit(event) {
     const distance = Math.hypot(x-p.x,y-p.y);
     return distance < (best?.distance ?? 15) ? {id:p.node.id,distance} : best;
   },null)?.id ?? null;
+}
+
+function hitEdge(event) {
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX-rect.left, y = event.clientY-rect.top;
+  let closest, nearest = 9;
+  for (const {edge,a,b} of renderedEdges) {
+    const dx = b.x-a.x, dy = b.y-a.y;
+    const length = dx*dx+dy*dy;
+    if (length < 1) continue;
+    const t = clamp(((x-a.x)*dx+(y-a.y)*dy)/length,0,1);
+    const distance = Math.hypot(x-(a.x+t*dx), y-(a.y+t*dy));
+    if (distance < nearest) {
+      closest = edge;
+      nearest = distance;
+    }
+  }
+  return closest;
 }
 
 function zoom(factor) {
@@ -438,7 +483,7 @@ canvas.addEventListener('pointermove', event => {
   } else {
     state.hot = hit(event);
     showMediaPreview(event.pointerType === 'mouse' ? state.hot : null);
-    canvas.classList.toggle('hot',Boolean(state.hot));
+    canvas.classList.toggle('hot',Boolean(state.hot || hitEdge(event)));
     drawSoon();
   }
 });
@@ -450,7 +495,14 @@ canvas.addEventListener('pointerleave', () => {
 });
 canvas.addEventListener('pointerup', event => {
   if (!drag || drag.id !== event.pointerId) return;
-  if (!drag.moved) selectNode(hit(event));
+  if (!drag.moved) {
+    const id = hit(event);
+    if (id) selectNode(id);
+    else {
+      const edge = hitEdge(event);
+      if (edge) inspectRelationship(edge);
+    }
+  }
   drag = null;
   canvas.classList.remove('drag');
 });

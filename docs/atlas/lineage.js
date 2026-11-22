@@ -10,7 +10,8 @@ const sourceNodes = new Map(Object.entries(lineageSources).map(([key, entry], in
     id:'source-'+key, type:'lineageSource', title, ref:author, note,
     detailKind:kind, gloss:locator, url:infoEdition ?? academyEdition, external:true,
     linkText:infoEdition ? 'Read on kabbalah.info' : 'Read in Academy library',
-    extraActions:infoEdition ? sourceLink(academyEdition,'Academy edition') : '',
+    extraActions:(infoEdition ? sourceLink(academyEdition,'Academy edition') : '') +
+      (key === 'pticha' ? '<a class="source-link" href="?view=sequence">Explore lights and vessels</a>' : ''),
     microOnly:true, ...nodePosition(index,entries.length)
   }];
 }));

@@ -29,7 +29,7 @@ const curatedNodes = [
 
 const curatedEdges = [
   ['ladder','tower','Textual echo','Both structures have a “top” associated with heaven. Bavel’s builders propose a tower, while the ladder appears in Yaakov’s dream.'],
-  ['ladder','sinai','Gematria · traditional','The consonants of סֻלָּם in Genesis 28:12 give 130, the same as סיני. Ibn Ezra describes this numerical reading as derash.'],
+  ['ladder','sinai','Gematria · traditional','The consonants of סֻלָּם in Genesis 28:12 give 130, the same as סיני. Ibn Ezra describes this numerical reading as derash.','Ibn_Ezra_on_Genesis.28.12.1','Ibn Ezra on Genesis 28:12'],
   ['ladder','gate','Narrative','After waking from the dream, Yaakov calls the place a gate of heaven.'],
   ['ladder','yaakov','Narrative','Yaakov sees the ladder and the messengers in the dream.'],
   ['ladder','vayetze','Text location','The dream belongs to the opening episode of Parashat Vayetze.'],
@@ -43,7 +43,8 @@ const curatedEdges = [
   ['mishkan','terumah','Text location','The sanctuary command appears in Parashat Terumah.'],
   ['yaakov','vayetze','Narrative','Vayetze follows Yaakov through departure, exile, and return.'],
   ['tower','heaven','Thematic reading','The builders imagine a tower extending from human settlement into heaven.']
-].map(([a,b,kind,detail])=>({a,b,kind,detail}));
+].map(([a,b,kind,detail,source,label])=>({a,b,kind,detail,
+  sources:source ? [{url:'https://www.sefaria.org/'+source,label}] : []}));
 
 // Entries keyed by atlas node ID, journal slug, or canonical Sefaria reference.
 // Each entry can hold a video preview and published video/audio layers with captions.

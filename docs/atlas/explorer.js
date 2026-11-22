@@ -42,6 +42,7 @@ const journalNodes = journal.map(journalNode);
 const allJournalEdges = [];
 const citations = new Map();
 const citationOwners = new Map();
+const sharedSources = new Map();
 
 function connectJournal(a,b,kind,detail) {
   if (a === b || allJournalEdges.some(e => (e.a === a && e.b === b) || (e.a === b && e.b === a))) return;
@@ -62,6 +63,7 @@ for (const study of journal) {
     if (sefariaRef) {
       const key = refKey(sefariaRef);
       if (!citationOwners.has(key)) citationOwners.set(key,new Set());
+      sharedSources.set(key,{url:citation.url,label:citation.title});
       citationOwners.get(key).add(study.id);
     }
   }
@@ -75,10 +77,17 @@ for (const [nodeId,studyId,detail] of curatedToJournal) {
     `<a class="source-link" href="?node=${node.id}">Explore Heaven &amp; Earth</a>`});
   connectJournal(studyId,id,'Atlas study',detail);
 }
-for (const owners of citationOwners.values()) {
+for (const [key,owners] of citationOwners) {
   const ids = [...owners];
   ids.forEach((a,i) => ids.slice(i+1).forEach(b => {
-    connectJournal(a,b,'Shared citation','Both articles cite the same Sefaria reference.');
+    const existing = allJournalEdges.find(edge => (edge.a === a && edge.b === b) || (edge.a === b && edge.b === a));
+    if (existing) {
+      existing.kind = 'Shared citation';
+      existing.detail = 'Both articles cite the same Sefaria reference.';
+      (existing.sources ??= []).push(sharedSources.get(key));
+    } else {
+      allJournalEdges.push({a,b,kind:'Shared citation',detail:'Both articles cite the same Sefaria reference.',sources:[sharedSources.get(key)]});
+    }
   }));
 }
 
@@ -97,7 +106,9 @@ function setHeader(mode,title,description) {
   $('atlas-title').textContent = title;
   $('atlas-intro').textContent = description;
   document.querySelector('.intro-hebrew').hidden = mode !== 'curated';
-  for (const id of ['curated','journal','lineage']) {
+  for (const id of ['atlas-workbench','atlas-connections','relationship-key']) $(id).hidden = mode === 'sequence';
+  $('sequence').hidden = mode !== 'sequence';
+  for (const id of ['curated','journal','lineage','sequence']) {
     const link = $(id+'-mode');
     if (id === mode) link.setAttribute('aria-current','page');
     else link.removeAttribute('aria-current');
@@ -220,7 +231,8 @@ function renderLive(page = 0, focus = false) {
     id:'linked:'+i,type:'text',title:link.ref,ref:link.group,sefariaRef:link.ref,
     ...nodePosition(i,section.length)
   }));
-  const linkEdges = section.map((link,i) => ({a:'source',b:'linked:'+i,kind:[...link.labels].join(' · '),
+  const linkEdges = section.map((link,i) => ({a:'source',b:'linked:'+i,kind:[...link.labels].join(' · '),evidenceType:'context',
+    sources:[...link.anchors].slice(0,2).map(ref => ({url:'https://www.sefaria.org/'+safeSlug(ref),label:ref})),
     detail:link.anchors.size ? 'Linked at '+[...link.anchors].slice(0,2).join(' · ')+(link.anchors.size > 2 ? ' …' : '') : 'Indexed by Sefaria'}));
   const citedBy = [...(citationOwners.get(refKey(text.ref)) ?? [])].map((id,i,array) =>
     ({...journalNode(journalById.get(id),i),position:[-0.85-i*0.26,0.63-i/(array.length+1)]}));
@@ -300,10 +312,12 @@ function showRoute(focus = false) {
   clearSuggestions();
   const params = new URLSearchParams(location.search);
   if (params.has('ref')) {
-    if (!routeView) openCurated();
+    if (!routeView || routeView === 'sequence') openCurated();
     const query = refFromInput(params.get('ref'));
     if (query.length && query.length <= 400) openLive(query,focus);
     else status('Enter a Sefaria reference.');
+  } else if (params.get('view') === 'sequence') {
+    openSequence(focus);
   } else if (params.has('layer')) {
     openLineage(params.get('layer'),focus);
   } else if (params.has('study') || params.get('view') === 'journal') {
