@@ -1,12 +1,17 @@
 'use strict';
 
-const lineageLibrary = 'https://kabbalah.academy/en-us/library/';
+const lineageLibrary = 'https://www.kabbalah.info/en/library/';
+const academyLibrary = 'https://kabbalah.academy/en-us/library/';
 const sourceNodes = new Map(Object.entries(lineageSources).map(([key, entry], index, entries) => {
   const [number,title,author,kind,locator,note] = entry;
+  const academyEdition = academyLibrary+'sources/articles/'+number+'/';
+  const infoEdition = lineageInfoEditions[key];
   return [key,{
     id:'source-'+key, type:'lineageSource', title, ref:author, note,
-    detailKind:kind, gloss:locator, url:lineageLibrary+'sources/articles/'+number+'/', external:true,
-    linkText:'Read in Bnei Baruch library', microOnly:true, ...nodePosition(index,entries.length)
+    detailKind:kind, gloss:locator, url:infoEdition ?? academyEdition, external:true,
+    linkText:infoEdition ? 'Read on kabbalah.info' : 'Read in Academy library',
+    extraActions:infoEdition ? sourceLink(academyEdition,'Academy edition') : '',
+    microOnly:true, ...nodePosition(index,entries.length)
   }];
 }));
 const termNodes = new Map(Object.entries(lineageTerms).map(([key,entry],index,entries) => {
@@ -68,7 +73,7 @@ function nodeLineage(node) {
 
 function lineageShelf(node) {
   if (node.type === 'concept' || node.type === 'lineageSource') {
-    return `<p class="lineage-library"><a href="${lineageLibrary}" target="_blank" rel="noopener noreferrer">Bnei Baruch Kabbalah Library</a></p>`;
+    return `<p class="lineage-library"><a href="${lineageLibrary}" target="_blank" rel="noopener noreferrer">Bnei Baruch Library · kabbalah.info</a></p>`;
   }
   const related = nodeLineage(node);
   return `<details class="lineage-shelf" ${related.length && !node.readerHTML ? 'open' : ''}>
@@ -81,6 +86,7 @@ function lineageShelf(node) {
         <p>${escapeHTML(reason)}</p><a class="lineage-node-link" href="?layer=${source.id}">View connections</a>${context && context !== node.title ? `<small>Via ${escapeHTML(context)}</small>` : ''}</li>`;
     }).join('')}</ul>` : '<p>Explore the lineage glossary and primary sources. A reading for this node has yet to be mapped.</p>'}
     <a class="lineage-map-link" href="?layer">Explore Kabbalah in 3D</a>
+    <a class="lineage-map-link" href="${lineageLibrary}" target="_blank" rel="noopener noreferrer">Browse kabbalah.info library</a>
   </details>`;
 }
 

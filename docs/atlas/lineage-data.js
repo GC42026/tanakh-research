@@ -30,6 +30,30 @@ const lineageSources = {
   creation: [2332,'Explanation of the Division of the Fourteen Commandments into Ten Utterances','Zohar for All, Sulam edition','Classical text with commentary','Introduction of the Zohar','Pairs commandments with the utterances of creation. This is a separate question from counting the speech at Sinai.']
 };
 
+// Parallel pages verified in the kabbalah.info library.
+const lineageInfoEditions = {
+  ladder: 'https://www.kabbalah.info/en/what-does-it-mean-that-the-ladder-is-diagonal-in-the-work/',
+  pharaoh: 'https://www.kabbalah.info/en/come-unto-pharaoh-2/',
+  wall: 'https://www.kabbalah.info/en/and-hezekiah-turned-his-face-to-the-wall/',
+  reason: 'https://www.kabbalah.info/en/concerning-above-reason/',
+  esau: 'https://www.kabbalah.info/en/it-is-forbidden-to-hear-a-good-thing-from-a-bad-person/',
+  work: 'https://www.kabbalah.info/en/what-are-torah-and-work-in-the-way-of-the-creator/',
+  exile: 'https://www.kabbalah.info/en/the-creator-and-israel-went-into-exile/',
+  shechina: 'https://www.kabbalah.info/en/what-is-when-israel-are-in-exile-the-shechina-is-with-them-in-the-work/',
+  lightVessels: 'https://www.kabbalah.info/en/part-3-chapter-one-tes/',
+  innerObservation: 'https://www.kabbalah.info/en/part-3-inner-observation-tes/',
+  branches: 'https://www.kabbalah.info/en/the-essence-of-the-wisdom-of-kabbalah-18/',
+  pticha: 'https://www.kabbalah.info/en/preface-to-the-wisdom-of-kabbalah-5/',
+  zoharIntro: 'https://www.kabbalah.info/en/introduction-to-the-book-of-zohar-5/',
+  foreword: 'https://www.kabbalah.info/en/foreword-to-the-book-of-zohar-5/',
+  souls: 'https://www.kabbalah.info/en/articles-600000-souls-18/',
+  study: 'https://www.kabbalah.info/en/introduction-to-the-preface-to-the-wisdom-of-kabbalah-2-5/',
+  letters: 'https://www.kabbalah.info/en/the-letters-of-rav-hamnuna-saba/',
+  arvut: 'https://www.kabbalah.info/en/the-arvut-mutual-guarantee-18/',
+  giving: 'https://www.kabbalah.info/en/matan-torah-the-giving-of-the-torah-18/',
+  creation: 'https://www.kabbalah.info/en/explanation-of-the-division-of-the-fourteen-commandments-into-ten-utterances/',
+};
+
 const lineageTerms = {
   kli: ['Kli','כְּלִי','Vessel','The capacity for receiving. In the technical texts its substance is the will to receive. Rabash also speaks of an experienced lack as a vessel for help.',['pticha','lightVessels','prayer','pharaoh']],
   soul: ['Lights of the soul','נֶפֶשׁ · רוּחַ · נְשָׁמָה · חַיָּה · יְחִידָה','NRNHY','Nefesh, Ruach, Neshama, Haya, and Yechida are five degrees of light. Baal HaSulam also describes all five distinctions within each degree.',['zoharIntro','pticha','souls','study']],
