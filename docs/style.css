@@ -64,3 +64,12 @@ time {
 }
 
 .entry time { margin-bottom: .9rem; }
+.start-link { font: 650 .88rem / 1.55 system-ui, sans-serif; }
+.topics { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+.topics a { font: 600 .82rem / 1.65 system-ui, sans-serif; }
+.topic { border-top: 1px solid var(--rule); margin-top: 1.8rem; padding-top: 1.1rem; }
+.topic h3 { margin-top: 0; }
+.topic h4 { margin: 0 0 .3rem; font-size: 1.13rem; line-height: 1.26; }
+.topic article p { color: var(--muted); margin-bottom: 0; }
+.related { border-top: 1px solid var(--rule); margin-top: 2.3rem; }
+.related ul { padding-left: 1.3rem; }

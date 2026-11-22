@@ -1,10 +1,12 @@
 # Tanakh Research
 
-A public research journal on Tanakh, Zohar, and Kabbalah. The site begins with a project introduction and a reading of the connections between Esav, Edom, and Mitzrayim.
+[Read the public research journal](https://gc42026.github.io/tanakh-research/).
 
-The public site lives in `docs/`. To publish it on GitHub Pages, open **Settings → Pages**, choose **Deploy from a branch**, and select `main` and `/docs`.
+The journal follows questions in Tanakh, Zohar, and Kabbalah through close readings, Jewish commentary, textual history, and comparative study. The first collection starts with the whole soul in each person and the Exodus as a journey of the many that can be undergone by the individual.
 
-To preview from the repository root:
+New work appears here as dated, source-linked studies. Each entry identifies what the text says, how a named source reads it, and what the project is still investigating.
+
+The site is published from `main:/docs` through GitHub Pages. To preview it locally:
 
 ```sh
 python3 -m http.server --bind 127.0.0.1 --directory docs
