@@ -13,3 +13,5 @@ python3 -m http.server --bind 127.0.0.1 --directory docs
 ```
 
 Open <http://localhost:8000/>.
+
+For a new study, use an existing page in `docs/research/` as a starting point. Its shared stylesheet and `entry-heading` and `related` elements carry over the illustrated heading and reading layout.

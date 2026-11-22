@@ -1,6 +1,8 @@
 :root {
   color-scheme: light;
-  --paper: #f5ead6;
+  --paper: #f6ebd7;
+  --folio: #fff7e7;
+  --brass: #a57343;
   --ink: #30231a;
   --muted: #685142;
   --accent: #763d2a;
@@ -18,7 +20,9 @@
 
 body {
   margin: 0;
-  background: radial-gradient(ellipse at 50% 0, #fff8e9, transparent 48rem);
+  background:
+    radial-gradient(ellipse at 16% 0, #eccb9636, transparent 36rem),
+    radial-gradient(ellipse at 68% 10rem, #fff9ec, transparent 48rem);
 }
 
 a {
@@ -39,7 +43,7 @@ a:focus-visible {
   gap: .45rem 1.35rem;
   padding: .92rem max(1.2rem, calc((100% - 64rem) / 2));
   background: var(--shadow);
-  border-bottom: 1px solid #987040;
+  border-bottom: 3px double #ab8257;
 }
 
 .site-header a { color: #f9e8c6; text-decoration: none; }
@@ -91,8 +95,11 @@ p { margin: 0 0 1rem; }
 .intro, .log { width: min(100%, 52rem); margin-inline: auto; }
 .intro {
   margin-block: clamp(2.1rem, 5vw, 3.6rem);
-  padding-inline-start: clamp(.9rem, 3vw, 1.7rem);
-  border-inline-start: 2px solid #aa7948;
+  padding: clamp(1rem, 3vw, 1.8rem);
+  border: 1px solid var(--rule);
+  border-inline-start: 3px solid var(--brass);
+  background: var(--folio);
+  box-shadow: 0 .4rem 1.3rem #4527170d;
 }
 .intro p:last-child { margin-bottom: 0; }
 
@@ -118,11 +125,26 @@ time {
   margin-top: 1.35rem;
   border: 1px solid var(--rule);
   border-top: 2px solid #a5784c;
-  background: #fbf3e3;
+  background: linear-gradient(125deg, var(--folio), #fbf0dc);
+  box-shadow: 0 .35rem .95rem #4527170d;
   padding: clamp(.9rem, 3vw, 1.5rem);
   scroll-margin-top: 1rem;
 }
-.topic h3 { margin-top: 0; }
+.topic h3 {
+  display: flex;
+  align-items: baseline;
+  gap: .55rem;
+  margin-top: 0;
+}
+
+.topic h3::before {
+  content: "";
+  width: .34rem;
+  height: .34rem;
+  flex: 0 0 auto;
+  border: 1px solid var(--brass);
+  transform: translateY(-.12em) rotate(45deg);
+}
 .topic article { border-top: 1px solid var(--rule); padding: .75rem 0 .65rem; }
 .topic article:last-child { padding-bottom: 0; }
 .topic h4 { margin: 0 0 .22rem; font-size: 1.18rem; }
@@ -130,19 +152,53 @@ time {
 
 .entry { overflow-wrap: break-word; }
 .entry-heading {
-  border-top: 2px solid #a5784c;
-  border-bottom: 1px solid var(--rule);
-  padding: 1.05rem 0 1.2rem;
-  margin-bottom: 1.5rem;
+  border: 1px solid var(--rule);
+  border-bottom: 3px double var(--rule);
+  padding: 0 0 1.35rem;
+  margin-bottom: 1.7rem;
+  background: var(--folio);
+  box-shadow: 0 .45rem 1.1rem #45271712;
 }
+.entry-heading::before {
+  content: "";
+  display: block;
+  height: clamp(5rem, 18vw, 10rem);
+  margin-bottom: 1.2rem;
+  border-bottom: 3px double #aa835f;
+  background: #422a1b url("assets/lamplit-folio.webp") center 10% / cover no-repeat;
+}
+
+.entry-heading > * { margin-inline: clamp(1rem, 4vw, 1.75rem); }
 .entry-heading time { margin-bottom: .55rem; }
 .entry-heading .lead { margin-bottom: 0; }
-.related { border-top: 1px solid var(--rule); margin-top: 2.3rem; }
+.related {
+  border: 1px solid var(--rule);
+  border-inline-start: 3px solid var(--brass);
+  margin-top: 2.3rem;
+  padding: 1.05rem clamp(1rem, 4vw, 1.55rem);
+  background: var(--folio);
+}
+
+.related h2 { margin-top: 0; }
+.related p:last-child { margin-bottom: 0; }
+
+main::after {
+  content: "";
+  display: block;
+  width: min(8rem, 55%);
+  height: .7rem;
+  margin: 2.7rem auto 0;
+  background:
+    linear-gradient(45deg, #ac8054 50%, transparent 51%) center / .48rem .48rem no-repeat,
+    linear-gradient(-135deg, #ac8054 50%, transparent 51%) center / .48rem .48rem no-repeat,
+    linear-gradient(90deg, transparent, #ac8054, transparent) center / 100% 1px no-repeat;
+}
 .related ul { padding-left: 1.3rem; }
 
 @media (max-width: 46rem) {
   .hero { display: block; }
   .hero-content { padding: 1.15rem 1.05rem 1.3rem; }
+  .start-link span { display: none; }
   .hero h1 { font-size: clamp(2.35rem, 9vw, 3.5rem); line-height: 1.03; }
   .hero-break { display: none; }
   .hero .lead { margin-top: .65rem; }
