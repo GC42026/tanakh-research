@@ -1,6 +1,8 @@
 'use strict';
 
 const categories = {
+  study: { label: 'Journal study', plural: 'Studies', color: '#edbc78' },
+  text: { label: 'Source text', plural: 'Texts', color: '#8cc6bd' },
   passage: { label: 'Passage', plural: 'Passages', color: '#edbc78' },
   person: { label: 'Person', plural: 'People', color: '#bca3e5' },
   parsha: { label: 'Parsha', plural: 'Parashot', color: '#8cc6bd' },
@@ -8,7 +10,7 @@ const categories = {
   source: { label: 'Commentary', plural: 'Commentary', color: '#9aace4' }
 };
 
-const nodes = [
+const curatedNodes = [
   { id:'ladder', type:'passage', title:'Yaakov’s Ladder', ref:'Genesis 28:12', url:'Genesis.28.12', he:'וַיַּחֲלֹם וְהִנֵּה סֻלָּם מֻצָּב אַרְצָה וְרֹאשׁוֹ מַגִּיעַ הַשָּׁמָיְמָה', gloss:'He dreamed of a ladder planted on the earth, its top reaching toward heaven.', word:'סֻלָּם', meaning:'sullam · ladder', note:'The dream shows movement in both directions. Messengers go up and down, and Yaakov wakes to call the place a gate of heaven.', position:[0.19,0.32], offset:[16,-15] },
   { id:'tower', type:'passage', title:'Tower of Bavel', ref:'Genesis 11:4', url:'Genesis.11.4', he:'וּמִגְדָּל וְרֹאשׁוֹ בַשָּׁמַיִם', gloss:'A tower with its top in the heavens.', word:'מִגְדָּל', meaning:'migdal · tower', note:'The builders want to make a name for themselves and avoid dispersal. Compare their project with the structure Yaakov sees in a dream.', position:[2.61,-0.40], offset:[-15,19] },
   { id:'gate', type:'passage', title:'Gate of Heaven', ref:'Genesis 28:17', url:'Genesis.28.17', he:'אֵין זֶה כִּי אִם בֵּית אֱלֹהִים וְזֶה שַׁעַר הַשָּׁמָיִם', gloss:'This is the house of God, and this is the gate of heaven.', word:'שַׁעַר', meaning:'sha’ar · gate', note:'After the dream, Yaakov identifies the place itself as a threshold between the earthly and the divine.', position:[1.55,0.69], offset:[15,-12] },
@@ -23,7 +25,7 @@ const nodes = [
   { id:'terumah', type:'parsha', title:'Terumah', ref:'Exodus 25:1–27:19', url:'Exodus.25.1-27.19', he:'וְיִקְחוּ לִי תְּרוּמָה', gloss:'Let them take an offering for me.', word:'תְּרוּמָה', meaning:'terumah · offering', note:'Instructions for the sanctuary begin with contributions from willing participants.', position:[2.98,0.34], offset:[15,-13] }
 ];
 
-const edges = [
+const curatedEdges = [
   ['ladder','tower','Textual echo','Both structures have a “top” associated with heaven. Bavel’s builders propose a tower, while the ladder appears in Yaakov’s dream.'],
   ['ladder','sinai','Gematria · traditional','The consonants of סֻלָּם in Genesis 28:12 give 130, the same as סיני. Ibn Ezra describes this numerical reading as derash.'],
   ['ladder','gate','Narrative','After waking from the dream, Yaakov calls the place a gate of heaven.'],
@@ -40,3 +42,7 @@ const edges = [
   ['yaakov','vayetze','Narrative','Vayetze follows Yaakov through departure, exile, and return.'],
   ['tower','heaven','Thematic reading','The builders imagine a tower extending from human settlement into heaven.']
 ].map(([a,b,kind,detail])=>({a,b,kind,detail}));
+
+// Entries keyed by atlas node ID, journal slug, or canonical Sefaria reference.
+// Each entry can hold a video preview and published video/audio layers with captions.
+const mediaByNode = new Map();
