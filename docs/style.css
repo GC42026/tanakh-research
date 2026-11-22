@@ -62,20 +62,19 @@ p { margin: 0 0 1rem; }
 .home main { width: min(calc(100% - 2.4rem), 64rem); margin-top: clamp(1.15rem, 3vw, 2.5rem); }
 
 .hero {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   align-items: center;
-  min-height: clamp(27rem, 45vw, 33rem);
   overflow: hidden;
-  background:
-    linear-gradient(90deg, rgba(25, 15, 10, .98) 0%, rgba(25, 15, 10, .85) 24%, rgba(25, 15, 10, .15) 65%, transparent 100%),
-    #251810 url("assets/scholars-study.webp") center 49% / cover no-repeat;
+  background: #251810;
   border: 1px solid #88613b;
-  box-shadow: 0 .65rem 1.7rem #412a2029, inset 0 0 0 .29rem #eac18e25;
+  box-shadow: 0 .65rem 1.7rem #412a2029;
   color: #fff0d4;
 }
 
-.hero-content { max-width: 27rem; padding: clamp(1.65rem, 5.5vw, 4.1rem); }
-.hero h1 { font-size: clamp(3rem, 7vw, 5.3rem); line-height: .96; }
+.hero-art { grid-column: 2; grid-row: 1; width: 100%; }
+.hero-content { grid-column: 1; grid-row: 1; padding: clamp(1.4rem, 4vw, 3rem); }
+.hero h1 { font-size: clamp(2.8rem, 6vw, 5.3rem); line-height: .96; }
 .hero .lead { max-width: 18rem; color: #f3dcc0; margin-top: 1.15rem; }
 .start-link {
   display: inline-block;
@@ -141,16 +140,9 @@ time {
 .related { border-top: 1px solid var(--rule); margin-top: 2.3rem; }
 .related ul { padding-left: 1.3rem; }
 
-@media (max-width: 40rem) {
-  .hero {
-    display: block;
-    min-height: 0;
-    padding-top: clamp(9rem, 57vw, 19rem);
-    background:
-      linear-gradient(to bottom, transparent 1rem, transparent 56%, #251810 100%) top / 100% clamp(10rem, 58vw, 20rem) no-repeat,
-      #251810 url("assets/scholars-study.webp") 73% top / auto clamp(11rem, 72vw, 26rem) no-repeat;
-  }
-  .hero-content { max-width: none; background: #251810; padding: .65rem 1.05rem 1.3rem; }
+@media (max-width: 46rem) {
+  .hero { display: block; }
+  .hero-content { padding: 1.15rem 1.05rem 1.3rem; }
   .hero h1 { font-size: clamp(2.35rem, 9vw, 3.5rem); line-height: 1.03; }
   .hero-break { display: none; }
   .hero .lead { margin-top: .65rem; }
