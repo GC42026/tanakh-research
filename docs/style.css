@@ -1,75 +1,157 @@
 :root {
   color-scheme: light;
-  --paper: #f8f5ed;
-  --ink: #251f18;
-  --muted: #655b4d;
-  --accent: #863b2f;
-  --rule: #d8cdbd;
+  --paper: #f5ead6;
+  --ink: #30231a;
+  --muted: #685142;
+  --accent: #763d2a;
+  --rule: #cdb793;
+  --shadow: #24170f;
+  --gold: #e4c18c;
+  --heading: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --label: system-ui, sans-serif;
   background: var(--paper);
   color: var(--ink);
-  font: 112.5% / 1.65 Georgia, "Times New Roman", serif;
+  font: 112.5% / 1.68 Georgia, "Times New Roman", serif;
 }
 
 * { box-sizing: border-box; }
 
-body { margin: 0; }
-
-.site-header {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: .3rem 1.25rem;
-  padding: 1.05rem max(1.45rem, calc((100% - 52rem) / 2));
-  border-top: 4px solid var(--accent);
-  border-bottom: 1px solid var(--rule);
-  font: 600 .83rem / 1.5 system-ui, sans-serif;
-}
-
-main {
-  width: min(calc(100% - 2.9rem), 42rem);
-  margin: clamp(2.25rem, 8vw, 5rem) auto 5rem;
+body {
+  margin: 0;
+  background: radial-gradient(ellipse at 50% 0, #fff8e9, transparent 48rem);
 }
 
 a {
   color: var(--accent);
-  text-underline-offset: .19em;
+  text-underline-offset: .2em;
 }
 
 a:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid currentColor;
   outline-offset: 4px;
 }
 
-.site-header a { text-decoration: none; }
-.site-header a:hover { text-decoration: underline; }
-
-h1, h2, h3 { line-height: 1.14; }
-h1 { font-size: clamp(2.45rem, 8vw, 4.5rem); margin: 0 0 .65rem; }
-h2 { font-size: 1.62rem; margin: 2rem 0 .45rem; }
-h3 { font-size: 1.36rem; margin: .35rem 0 .5rem; }
-p { margin: 0 0 1rem; }
-.lead { color: var(--muted); font-size: 1.28rem; margin-bottom: 1.5rem; }
-
-.log {
-  border-top: 1px solid var(--rule);
-  margin-top: 2.7rem;
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .45rem 1.35rem;
+  padding: .92rem max(1.2rem, calc((100% - 64rem) / 2));
+  background: var(--shadow);
+  border-bottom: 1px solid #987040;
 }
 
-.log article { margin-top: 1.15rem; }
+.site-header a { color: #f9e8c6; text-decoration: none; }
+.site-header a:hover { text-decoration: underline; }
+.site-header > a { font: 600 1.12rem / 1.45 var(--heading); }
+.site-header nav { font: 550 .75rem / 1.5 var(--label); }
+
+main {
+  width: min(calc(100% - 2.4rem), 42rem);
+  margin: clamp(2rem, 6vw, 4.6rem) auto 5rem;
+}
+
+h1, h2, h3, h4 { font-family: var(--heading); line-height: 1.16; }
+h1 { font-size: clamp(2.4rem, 6vw, 4.05rem); margin: 0 0 .65rem; font-weight: 600; }
+h2 { font-size: 1.72rem; margin: 2rem 0 .45rem; }
+h3 { font-size: 1.34rem; margin: .35rem 0 .5rem; }
+p { margin: 0 0 1rem; }
+.lead { color: var(--muted); font-size: 1.23rem; margin-bottom: 1.45rem; }
+
+.home main { width: min(calc(100% - 2.4rem), 64rem); margin-top: clamp(1.15rem, 3vw, 2.5rem); }
+
+.hero {
+  display: flex;
+  align-items: center;
+  min-height: clamp(27rem, 45vw, 33rem);
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(25, 15, 10, .98) 0%, rgba(25, 15, 10, .85) 24%, rgba(25, 15, 10, .15) 65%, transparent 100%),
+    #251810 url("assets/scholars-study.webp") center 49% / cover no-repeat;
+  border: 1px solid #88613b;
+  box-shadow: 0 .65rem 1.7rem #412a2029, inset 0 0 0 .29rem #eac18e25;
+  color: #fff0d4;
+}
+
+.hero-content { max-width: 27rem; padding: clamp(1.65rem, 5.5vw, 4.1rem); }
+.hero h1 { font-size: clamp(3rem, 7vw, 5.3rem); line-height: .96; }
+.hero .lead { max-width: 18rem; color: #f3dcc0; margin-top: 1.15rem; }
+.start-link {
+  display: inline-block;
+  padding: .55rem .74rem;
+  border: 1px solid #b48b5d;
+  background: #251810;
+  color: #fae0ae;
+  font: 600 .74rem / 1.5 var(--label);
+  text-decoration: none;
+}
+.start-link span { margin-inline-start: .25em; }
+.start-link:hover { background: #492d1d; text-decoration: underline; }
+
+.intro, .log { width: min(100%, 52rem); margin-inline: auto; }
+.intro {
+  margin-block: clamp(2.1rem, 5vw, 3.6rem);
+  padding-inline-start: clamp(.9rem, 3vw, 1.7rem);
+  border-inline-start: 2px solid #aa7948;
+}
+.intro p:last-child { margin-bottom: 0; }
+
+.log { border-top: 1px solid var(--rule); }
+.log > h2 { margin-top: 1.3rem; font-size: clamp(1.9rem, 5vw, 2.7rem); }
 
 time {
   display: block;
   color: var(--muted);
-  font: 500 .78rem / 1.4 system-ui, sans-serif;
+  font: 550 .75rem / 1.45 var(--label);
 }
 
-.entry time { margin-bottom: .9rem; }
-.start-link { font: 650 .88rem / 1.55 system-ui, sans-serif; }
-.topics { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
-.topics a { font: 600 .82rem / 1.65 system-ui, sans-serif; }
-.topic { border-top: 1px solid var(--rule); margin-top: 1.8rem; padding-top: 1.1rem; }
+.topics { display: flex; flex-wrap: wrap; gap: .45rem .65rem; margin-top: .9rem; }
+.topics a {
+  border: 1px solid var(--rule);
+  padding: .3rem .55rem;
+  font: 600 .73rem / 1.55 var(--label);
+  text-decoration: none;
+}
+.topics a:hover { background: #ead6b6; text-decoration: underline; }
+
+.topic {
+  margin-top: 1.35rem;
+  border: 1px solid var(--rule);
+  border-top: 2px solid #a5784c;
+  background: #fbf3e3;
+  padding: clamp(.9rem, 3vw, 1.5rem);
+  scroll-margin-top: 1rem;
+}
 .topic h3 { margin-top: 0; }
-.topic h4 { margin: 0 0 .3rem; font-size: 1.13rem; line-height: 1.26; }
+.topic article { border-top: 1px solid var(--rule); padding: .75rem 0 .65rem; }
+.topic article:last-child { padding-bottom: 0; }
+.topic h4 { margin: 0 0 .22rem; font-size: 1.18rem; }
 .topic article p { color: var(--muted); margin-bottom: 0; }
+
+.entry { overflow-wrap: break-word; }
+.entry-heading {
+  border-top: 2px solid #a5784c;
+  border-bottom: 1px solid var(--rule);
+  padding: 1.05rem 0 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.entry-heading time { margin-bottom: .55rem; }
+.entry-heading .lead { margin-bottom: 0; }
 .related { border-top: 1px solid var(--rule); margin-top: 2.3rem; }
 .related ul { padding-left: 1.3rem; }
+
+@media (max-width: 40rem) {
+  .hero {
+    display: block;
+    min-height: 0;
+    padding-top: clamp(9rem, 57vw, 19rem);
+    background:
+      linear-gradient(to bottom, transparent 1rem, transparent 56%, #251810 100%) top / 100% clamp(10rem, 58vw, 20rem) no-repeat,
+      #251810 url("assets/scholars-study.webp") 73% top / auto clamp(11rem, 72vw, 26rem) no-repeat;
+  }
+  .hero-content { max-width: none; background: #251810; padding: .65rem 1.05rem 1.3rem; }
+  .hero h1 { font-size: clamp(2.35rem, 9vw, 3.5rem); line-height: 1.03; }
+  .hero-break { display: none; }
+  .hero .lead { margin-top: .65rem; }
+}
