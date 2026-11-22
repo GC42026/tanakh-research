@@ -1,0 +1,73 @@
+body {
+  position: relative;
+  isolation: isolate;
+  display: flow-root;
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto 0 0;
+  height: min(18rem, 40vh);
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 110%, rgb(216 126 50 / .27), transparent 70%);
+}
+
+.candlelight {
+  position: fixed;
+  z-index: 3;
+  inset: auto 0 0 auto;
+  width: clamp(8rem, 24vw, 20rem);
+  height: clamp(9rem, 27vw, 22rem);
+  --candle-inset: clamp(.32rem, 1.8vw, 1.4rem);
+  --candle-base: max(.5rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+  background: radial-gradient(ellipse at 100% 100%, rgb(242 145 52 / .25), rgb(245 172 75 / .08) 42%, transparent 71%);
+}
+
+.candlelight::before,
+.candlelight::after {
+  content: "";
+  position: absolute;
+  right: max(var(--candle-inset), env(safe-area-inset-right));
+  width: clamp(.53rem, 1.2vw, .85rem);
+}
+
+.candlelight::before {
+  bottom: calc(var(--candle-base) + 1.08rem);
+  height: 1.13rem;
+  border-radius: 72% 32% 52% 48% / 78% 51% 44% 27%;
+  background: radial-gradient(ellipse at 50% 76%, #fff7d1 14%, #ffd081 46%, #f99b39 72%, #d36429 92%);
+  box-shadow: 0 0 .65rem .17rem #f7a7529e, 0 0 1.8rem .5rem #ec9a4947;
+  transform: scaleX(.72) rotate(7deg);
+  transform-origin: 50% 88%;
+}
+
+.candlelight::after {
+  bottom: var(--candle-base);
+  height: 1.13rem;
+  border-radius: 35% 35% 14% 14% / 18% 18% 12% 12%;
+  background:
+    radial-gradient(ellipse at 50% 3%, #4b3025 0 9%, transparent 15%),
+    linear-gradient(90deg, #ac774b, #edc994 35%, #dbae78 75%, #9c6944);
+  box-shadow: 0 .18rem .42rem #41231550;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .candlelight::before {
+    animation: flame-flicker 5.7s ease-in-out infinite;
+  }
+}
+
+@keyframes flame-flicker {
+  0%, 100% { transform: scale(.72, 1) rotate(7deg); opacity: .94; }
+  18% { transform: scale(.65, .9) rotate(2deg); opacity: .83; }
+  36% { transform: scale(.77, 1.07) rotate(11deg); opacity: 1; }
+  57% { transform: scale(.68, .95) rotate(4deg); opacity: .89; }
+  76% { transform: scale(.75, 1.03) rotate(9deg); opacity: .97; }
+}
+
+@media print {
+  body::after, .candlelight { display: none; }
+}
