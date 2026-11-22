@@ -136,3 +136,13 @@ button.action:disabled {opacity:.45}
 #media-preview video {display:block;width:100%}
 [hidden] {display:none !important}
 @media(max-width:560px) {#lookup {width:100%}.lookup-input {width:100%}.lookup-input input {flex:1;min-width:0}.intro-hebrew {display:none}}
+.lineage-shelf {border:1px solid #51405a;border-radius:7px;background:#211929;padding:9px 10px}
+.lineage-shelf summary {color:#e0c9ee;cursor:pointer;font-size:.83rem}
+.lineage-shelf summary span {margin-left:4px;color:var(--muted);font-size:.75rem}
+.lineage-shelf ul {margin:9px 0;padding:0;list-style:none;max-height:242px;overflow:auto;scrollbar-color:#63465f transparent}
+.lineage-shelf li {padding:7px 0;border-bottom:1px solid var(--line)}
+.lineage-shelf li:first-child {padding-top:0}
+.lineage-shelf li a {font-family:Georgia,serif;font-size:.96rem}
+.lineage-shelf small,.lineage-shelf p {display:block;color:var(--muted);font-size:.75rem;line-height:1.45;margin:4px 0}
+.lineage-map-link,.lineage-library {display:block;margin:8px 0 0;font-size:.8rem}
+.lineage-shelf .lineage-node-link {color:#d8b5eb;font:inherit;font-size:.75rem}

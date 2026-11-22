@@ -1,6 +1,8 @@
 'use strict';
 
 const categories = {
+  concept: { label: 'Kabbalah term', plural: 'Terms', color: '#ddbd83' },
+  lineageSource: { label: 'Bnei Baruch source', plural: 'Sources', color: '#c1a5e6' },
   study: { label: 'Journal study', plural: 'Studies', color: '#edbc78' },
   text: { label: 'Source text', plural: 'Texts', color: '#8cc6bd' },
   passage: { label: 'Passage', plural: 'Passages', color: '#edbc78' },

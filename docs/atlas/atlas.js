@@ -95,7 +95,7 @@ function renderSelection(focusTarget) {
     ${node.gloss ? `<p class="gloss">${escapeHTML(node.gloss)}</p>` : ''}</div>` : ''}
     ${node.note ? `<p class="node-note">${escapeHTML(node.note)}</p>` : ''}`;
   $('inspector').innerHTML = `
-    <div><div class="card-type" style="--dot:${category.color}"><span class="dot"></span>${category.label}</div>
+    <div><div class="card-type" style="--dot:${category.color}"><span class="dot"></span>${escapeHTML(node.detailKind ?? category.label)}</div>
     <h2 tabindex="-1" id="selection-title">${escapeHTML(node.title)}</h2><p class="reference">${escapeHTML(node.ref)}</p></div>
     ${node.readerHTML ?? defaultContent}
     ${breakdown.length ? `<div class="gem-box"><div class="gem-top"><span class="eyebrow">GEMATRIA</span><span class="gem-number">${total}</span></div><p class="gem-word"><b lang="he" dir="rtl">${escapeHTML(node.word)}</b> ${escapeHTML(node.meaning)}</p><div class="letters">${breakdown.map(([letter,value]) => `<span><b lang="he">${letter}</b>${value}</span>`).join('')}</div></div>` : ''}
@@ -103,8 +103,9 @@ function renderSelection(focusTarget) {
       <${layer.kind} class="reader-media" controls preload="none" src="${escapeHTML(webUrl(layer.src))}">${layer.captions && webUrl(layer.captions) ? `<track kind="captions" src="${escapeHTML(webUrl(layer.captions))}" srclang="${escapeHTML(layer.lang ?? 'en')}" default>` : ''}</${layer.kind}></div>`).join('')}
     <div class="inspector-actions">${node.articleHref ? `<a class="source-link" href="${escapeHTML(node.articleHref)}">Read the journal post</a>` : ''}
     ${node.sefariaRef && !node.readerHTML ? openTextButton(node.sefariaRef) : ''}
-    ${node.url ? sourceLink(webUrl(node.external ? node.url : 'https://www.sefaria.org/'+node.url), node.external ? 'Open cited source' : 'Read on Sefaria') : ''}
-    ${node.extraActions ?? ''}</div>`;
+    ${node.url ? sourceLink(webUrl(node.external ? node.url : 'https://www.sefaria.org/'+node.url), node.linkText ?? (node.external ? 'Open cited source' : 'Read on Sefaria')) : ''}
+    ${node.extraActions ?? ''}</div>
+    ${lineageShelf(node)}`;
   const links = nearby(node.id);
   $('edge-count').textContent = `${atlasOptions.linkSummary ?? `${links.length} direct links`}`;
   $('edges').innerHTML = links.map(edge => {

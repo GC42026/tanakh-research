@@ -19,3 +19,5 @@ For a new study, use an existing page in `docs/research/` as a starting point. I
 The atlas lives in `docs/atlas/`. After adding a journal study, add its **Explore this study in the atlas** link with `../atlas/?study=<filename-without-.html>`, then run `python3 scripts/build-atlas-journal.py`. The index takes each study’s title, summary, citations, and related reading from its HTML.
 
 For recorded material, add an entry to `mediaByNode` in `docs/atlas/data.js` using an atlas node ID, journal slug, or canonical Sefaria reference. An entry can contain a `preview` video URL and a `layers` list of objects with `kind` (`audio` or `video`), `title`, `src`, and optional `captions` (WebVTT) and `lang`. Hover previews play muted. The selected node exposes the full media through playback controls.
+
+The atlas’s Kabbalah layer is maintained in `docs/atlas/lineage-data.js`. Add an edition with its author, section locator, and reading note. Then connect it to a term or list it under a passage or study in `lineageAnchors`. Use the note on each connection to identify a direct reading, a shared source, or a comparison proposed by the project.

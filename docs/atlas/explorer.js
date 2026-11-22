@@ -97,7 +97,7 @@ function setHeader(mode,title,description) {
   $('atlas-title').textContent = title;
   $('atlas-intro').textContent = description;
   document.querySelector('.intro-hebrew').hidden = mode !== 'curated';
-  for (const id of ['curated','journal']) {
+  for (const id of ['curated','journal','lineage']) {
     const link = $(id+'-mode');
     if (id === mode) link.setAttribute('aria-current','page');
     else link.removeAttribute('aria-current');
@@ -214,7 +214,7 @@ function renderLive(page = 0, focus = false) {
   const readerScroll = readerState ? [...readerState.querySelectorAll('.reader-text')].map(item => item.scrollTop) : [];
   const section = links.slice(page*connectionsPerPage,(page+1)*connectionsPerPage);
   const root = {id:'source',type:'text',title:text.ref,ref:text.heRef ?? 'Sefaria',
-    url:textSlug,mediaKey:text.ref,readerHTML:readerContent(text),
+    url:textSlug,canonicalRef:text.ref,mediaKey:text.ref,readerHTML:readerContent(text),
     position:[0.17,0.26],offset:[16,-14]};
   const linkedNodes = section.map((link,i) => ({
     id:'linked:'+i,type:'text',title:link.ref,ref:link.group,sefariaRef:link.ref,
@@ -304,6 +304,8 @@ function showRoute(focus = false) {
     const query = refFromInput(params.get('ref'));
     if (query.length && query.length <= 400) openLive(query,focus);
     else status('Enter a Sefaria reference.');
+  } else if (params.has('layer')) {
+    openLineage(params.get('layer'),focus);
   } else if (params.has('study') || params.get('view') === 'journal') {
     openJournal(params.get('study'));
     if (focus) $('selection-title').focus();
@@ -332,4 +334,4 @@ document.addEventListener('click',event => {
   }
 });
 addEventListener('popstate',() => showRoute());
-showRoute();
+document.addEventListener('DOMContentLoaded',() => showRoute());
