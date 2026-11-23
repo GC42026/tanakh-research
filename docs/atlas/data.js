@@ -8,6 +8,7 @@ const categories = {
   passage: { label: 'Passage', plural: 'Passages', color: '#edbc78' },
   person: { label: 'Person', plural: 'People', color: '#bca3e5' },
   parsha: { label: 'Parsha', plural: 'Parashot', color: '#8cc6bd' },
+  metal: { label: 'Metal', plural: 'Metals', color: '#d89670' },
   motif: { label: 'Motif', plural: 'Motifs', color: '#e899a8' },
   source: { label: 'Commentary', plural: 'Commentary', color: '#9aace4' }
 };

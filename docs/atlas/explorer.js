@@ -108,7 +108,7 @@ function setHeader(mode,title,description) {
   document.querySelector('.intro-hebrew').hidden = mode !== 'curated';
   for (const id of ['atlas-workbench','atlas-connections','relationship-key']) $(id).hidden = mode === 'sequence';
   $('sequence').hidden = mode !== 'sequence';
-  for (const id of ['curated','journal','lineage','sequence']) {
+  for (const id of ['curated','journal','lineage','sequence','metals']) {
     const link = $(id+'-mode');
     if (id === mode) link.setAttribute('aria-current','page');
     else link.removeAttribute('aria-current');
@@ -133,7 +133,8 @@ function openCurated(id = 'ladder') {
   setHeader('curated','',curatedIntro);
   $('atlas-title').innerHTML = curatedTitle;
   const graph = curatedNodes.map(node => ({...node,sefariaRef:node.url,
-    extraActions:journalLinks(curatedToJournal.filter(([nodeId]) => node.id === nodeId).map(([,studyId]) => studyId))}));
+    extraActions:journalLinks(curatedToJournal.filter(([nodeId]) => node.id === nodeId).map(([,studyId]) => studyId)) +
+      (['mishkan','terumah'].includes(node.id) ? '<a class="source-link" href="?view=metals">Explore the Mishkan metals</a>' : '')}));
   const selected = graph.some(node => node.id === id) ? id : 'ladder';
   setAtlas(graph,curatedEdges,selected);
 }
@@ -318,6 +319,8 @@ function showRoute(focus = false) {
     else status('Enter a Sefaria reference.');
   } else if (params.get('view') === 'sequence') {
     openSequence(focus);
+  } else if (params.get('view') === 'metals') {
+    openMetals(params.get('node'),focus);
   } else if (params.has('layer')) {
     openLineage(params.get('layer'),focus);
   } else if (params.has('study') || params.get('view') === 'journal') {
