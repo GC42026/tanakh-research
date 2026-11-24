@@ -280,6 +280,10 @@ const journal = [
     "summary": "The Zohar, the language of branches, and a reading of “Come to Pharaoh.”",
     "sources": [
       {
+        "url": "https://www.kabbalah.info/en/root-and-branch-part-1/",
+        "title": "Michael Laitman, Root and Branch"
+      },
+      {
         "url": "https://www.sefaria.org/Midrash_Tanchuma%2C_Pekudei.3.3",
         "title": "Tanchuma, Pekudei 3:3"
       },
